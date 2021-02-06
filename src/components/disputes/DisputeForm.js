@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
+import Web3 from 'web3';
 import { Modal, Button } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
-import { ContractContext, CurrentUserContext } from 'contexts/Store';
+import { UserContext } from 'contexts/User';
 import Loader from '../shared/Loader';
 import EtherscanLink from 'components/shared/EtherscanlLnk';
 
@@ -18,8 +19,7 @@ const DisputeForm = ({
   const [processed, setProcessed] = useState(false);
   const [currentTx, setCurrentTx] = useState();
   const [error, setError] = useState();
-  const [contract] = useContext(ContractContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser] = useContext(UserContext);
 
   const getTx = (tx) => {
     setCurrentTx(tx);
@@ -33,8 +33,8 @@ const DisputeForm = ({
     setProcessing(true);
 
     try {
-      await contract.service.beginDispute(
-        currentUser.username,
+      await currentUser.contract.service.beginDispute(
+        currentUser.address,
         miningEvent.requestId,
         miningEvent.time,
         miner,
@@ -75,7 +75,7 @@ const DisputeForm = ({
     setVisible(true);
   };
 
-  const canDispute = currentUser && +currentUser.balance > contract.disputeFee;
+  const canDispute = currentUser && +currentUser.balance > currentUser.contract.getDisputeFee();
 
   return (
     <>
@@ -108,7 +108,7 @@ const DisputeForm = ({
               ) : (
                   <CloseCircleOutlined style={{ color: '#dd5858' }} />
                 )}
-              {contract.service.fromWei(contract.disputeFee)} TRB
+              {Web3.utils.fromWei(currentUser.contract.disputeFee)} TRB
             </p>
 
             {!currentUser ? (

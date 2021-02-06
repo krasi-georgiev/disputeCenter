@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { Table } from 'antd';
 import styled from 'styled-components';
 
+import OpenDisputesFetch from 'components/disputes/OpenDiputesFetch';
 import DisputeForm from 'components/disputes/DisputeForm';
 import VoteForm from 'components/votes/VoteForm';
 import Loader from 'components/shared/Loader';
 import { getMinerValueStatus, getMatchingDispute } from 'utils/helpers';
-import { OpenDisputesContext } from 'contexts/Store';
 
 const WarningSpan = styled.span`
   color: #faad14;
 `;
 
 const MinerValues = ({ miningEvent, valueIndex, closeMinerValuesModal }) => {
-  const [openDisputes] = useContext(OpenDisputesContext);
+  const [openDisputes, setOpenDisputes] = useState();
 
   const checkWarning = (text, record) => {
+    OpenDisputesFetch(setOpenDisputes)
     const status = getMinerValueStatus(record, openDisputes, miningEvent);
     if (status === 'Mined') {
       return <span>{text || status}</span>;
@@ -74,8 +75,8 @@ const MinerValues = ({ miningEvent, valueIndex, closeMinerValuesModal }) => {
           pagination={false}
         />
       ) : (
-        <Loader />
-      )}
+          <Loader />
+        )}
     </>
   );
 };

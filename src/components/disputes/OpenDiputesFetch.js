@@ -1,20 +1,18 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GET_LATEST_DISPUTES } from 'utils/queries';
 import GraphFetch from 'components/shared/GraphFetch';
-import { OpenDisputesContext } from 'contexts/Store';
 
-const OpenDisputesFetch = () => {
+export const OpenDisputesFetch = ({ setRecords }) => {
   const [latestValues, setLatestValues] = useState();
-  const [, setOpenDisputes] = useContext(OpenDisputesContext);
 
   useEffect(() => {
     if (latestValues) {
-      const openDisputes = latestValues.disputes.filter(
+      const disputes = latestValues.disputes.filter(
         (dispute) => dispute.status === 'Open Dispute',
       );
 
-      setOpenDisputes(openDisputes);
+      setRecords(disputes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [latestValues]);

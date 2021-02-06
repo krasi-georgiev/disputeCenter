@@ -8,10 +8,11 @@ import OpenDisputesFetch from 'components/disputes/OpenDiputesFetch';
 
 const Disputes = () => {
   const [disputes, setDisputes] = useState();
+  const [setDisputesOpen] = useState();
 
   return (
     <>
-      <OpenDisputesFetch />
+      <OpenDisputesFetch dispute={setDisputesOpen} />
       <GraphFetch query={GET_ALL_DISPUTES} setRecords={setDisputes} />
       {disputes ? (
         <>

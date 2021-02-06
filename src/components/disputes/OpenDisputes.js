@@ -1,16 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 
 import DisputesTable from './DisputesTable';
-import { OpenDisputesContext } from 'contexts/Store';
+import { OpenDisputesFetch } from './OpenDiputesFetch';
 
 const OpenDisputes = () => {
-  const [openDisputes] = useContext(OpenDisputesContext);
+  let [openDisputes, setOpenDisputes] = useState()
 
   return (
     <div>
       <div className="TableHeader">
         <h2>Open Disputes</h2>
       </div>
+      <OpenDisputesFetch setDisputes={setOpenDisputes} />
       {openDisputes && (
         <DisputesTable pagination={false} disputes={openDisputes} open={true} />
       )}

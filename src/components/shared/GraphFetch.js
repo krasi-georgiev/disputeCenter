@@ -3,25 +3,18 @@ import { ApolloClient, useQuery } from '@apollo/client'
 
 
 import { cache } from '../../utils/cache';
-import { getChainData } from 'utils/chains';
-import { NetworkContext } from 'contexts/Store';
+import { chains } from 'utils/chains';
+import { NetworkContext } from 'contexts/Network';
 import Loader from './Loader';
-
-const client = new ApolloClient({
-  uri: getChainData(1).subgraph_url,
-  cache: cache
-});
-
-const rinkebyClient = new ApolloClient({
-  uri: getChainData(4).subgraph_url,
-  cache: cache
-});
 
 const GraphFetch = ({ query, setRecords, variables, suppressLoading }) => {
   const [currentNetwork] = useContext(NetworkContext);
 
   const { loading, error, data } = useQuery(query, {
-    client: currentNetwork === '1' ? client : rinkebyClient,
+    client: new ApolloClient({
+      uri: chains[currentNetwork].subgraphURL,
+      cache: cache
+    }),
     variables,
     fetchPolicy: 'network-only',
     pollInterval: 5000,

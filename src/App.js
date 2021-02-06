@@ -6,7 +6,10 @@ import styled from 'styled-components';
 
 import Routes from './Routes';
 import HeaderNav from 'components/shared/HeaderNav';
+import User from 'contexts/User';
 import Footer from 'components/shared/Footer';
+import Theme from './contexts/Theme';
+import Network from './contexts/Network';
 
 const StyledLayout = styled(Layout)`
   height: 100%;
@@ -16,20 +19,26 @@ const App = () => {
   const { Content } = Layout;
 
   return (
-    <Fragment>
-      <Helmet defaultTitle="Tellor Dispute Center">
-        <meta name="description" content="Tellor Dispute Center" />
-      </Helmet>
-      <StyledLayout>
-        <Router>
-          <HeaderNav />
-          <Content>
-            <Routes />
-          </Content>
-          <Footer />
-        </Router>
-      </StyledLayout>
-    </Fragment>
+    <Theme>
+      <Network>
+        <Fragment>
+          <Helmet defaultTitle="Tellor Dispute Center">
+            <meta name="description" content="Tellor Dispute Center" />
+          </Helmet>
+          <StyledLayout>
+            <Router>
+              <User>
+                <HeaderNav />
+              </User>
+              <Content>
+                <Routes />
+              </Content>
+              <Footer />
+            </Router>
+          </StyledLayout>
+        </Fragment>
+      </Network>
+    </Theme>
   );
 };
 

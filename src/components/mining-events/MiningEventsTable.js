@@ -2,12 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Table } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import Lottie from 'react-lottie';
-import { ModeContext } from '../../contexts/Store';
+import { ThemeContext } from '../../contexts/Theme';
 import MiningEvents from './MiningEvents';
 import CurrentMiningEvents from './CurrentMiningEvents';
 
 const MiningEventsTable = ({ events, pagination, current }) => {
-  const [mode] = useContext(ModeContext);
+  const [mode] = useContext(ThemeContext);
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -99,10 +99,10 @@ const MiningEventsTable = ({ events, pagination, current }) => {
             <MinusOutlined />
           </span>
         ) : (
-          <span>
-            <PlusOutlined />
-          </span>
-        )
+            <span>
+              <PlusOutlined />
+            </span>
+          )
       }
       expandRowByClick={true}
       pagination={pagination}

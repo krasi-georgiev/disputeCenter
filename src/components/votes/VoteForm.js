@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Loader from '../shared/Loader';
 import { Button, Modal } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { CurrentUserContext, ContractContext } from 'contexts/Store';
+import { UserContext } from 'contexts/User';
 import EtherscanLink from 'components/shared/EtherscanlLnk';
 
 const VoteForm = ({ dispute }) => {
@@ -12,25 +12,24 @@ const VoteForm = ({ dispute }) => {
   const [currentTx, setCurrentTx] = useState();
   const [hasVoted, setHasVoted] = useState();
   const [error, setError] = useState();
-  const [contract] = useContext(ContractContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser] = useContext(UserContext);
 
   useEffect(() => {
     const getHasVoted = async () => {
-      const res = await contract.service.didVote(
+      const res = await currentUser.contract.service.didVote(
         dispute.disputeId,
-        currentUser.username,
+        currentUser.address,
       );
 
       setHasVoted(res);
     };
 
-    if (currentUser && contract) {
+    if (currentUser && currentUser.contract) {
       getHasVoted();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser, contract]);
+  }, [currentUser, currentUser.contract]);
 
   const getTx = (tx) => {
     setCurrentTx(tx);
@@ -44,8 +43,8 @@ const VoteForm = ({ dispute }) => {
     setProcessing(true);
 
     try {
-      await contract.service.vote(
-        currentUser.username,
+      await currentUser.contract.service.vote(
+        currentUser.address,
         dispute.disputeId,
         supportsDispute,
         getTx,
@@ -111,10 +110,10 @@ const VoteForm = ({ dispute }) => {
                   {canVote ? (
                     <CheckCircleOutlined />
                   ) : (
-                    <CloseCircleOutlined style={{ color: '#dd5858' }} />
-                  )}
+                      <CloseCircleOutlined style={{ color: '#dd5858' }} />
+                    )}
                   {currentUser.balance &&
-                    contract.service.fromWei(
+                    currentUser.contract.service.fromWei(
                       currentUser.balance.toString(),
                     )}{' '}
                   TRB
@@ -128,10 +127,10 @@ const VoteForm = ({ dispute }) => {
                 ) : null}
               </>
             ) : (
-              <p className="ErrorMsg">
-                You need to sign in with MetaMask to vote
-              </p>
-            )}
+                <p className="ErrorMsg">
+                  You need to sign in with MetaMask to vote
+                </p>
+              )}
             <Button
               key="support"
               type="primary"

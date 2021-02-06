@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 import { RightCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-import { CurrentUserContext } from '../../contexts/Store';
+import { UserContext } from '../../contexts/User';
 import { Web3SignIn } from './Web3SignIn';
 import { truncateAddr } from '../../utils/helpers';
 import tellorLogoDark from '../../assets/Tellor__Logo--Dark.png';
@@ -12,7 +12,7 @@ import NetworkSwitcher from './NetworkSwitcher';
 
 const HeaderNav = () => {
   const { Header } = Layout;
-  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(UserContext);
   const [logo, setLogo] = useState(tellorLogoDark);
 
   return (
@@ -36,12 +36,11 @@ const HeaderNav = () => {
           >
             Price Viewer <RightCircleOutlined />
           </a>
-
           {!currentUser ? (
             <Web3SignIn setCurrentUser={setCurrentUser} />
           ) : (
-            <span>{truncateAddr(currentUser.username)}</span>
-          )}
+              <span>{truncateAddr(currentUser.address)}</span>
+            )}
           <NetworkSwitcher />
         </div>
       </div>

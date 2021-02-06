@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Table } from 'antd';
 import VoteForm from 'components/votes/VoteForm';
-import { ContractContext } from 'contexts/Store';
+import Web3 from 'web3';
 
 const DisputesTable = ({ disputes, pagination }) => {
-  const [contract] = useContext(ContractContext);
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -20,7 +19,7 @@ const DisputesTable = ({ disputes, pagination }) => {
       key: 'tally',
       render: (text) => {
         if (text) {
-          return contract ? parseInt(+contract.service.fromWei(text)) : '';
+          return Web3.utils.fromWei(text)
         } else {
           return 'Pending';
         }

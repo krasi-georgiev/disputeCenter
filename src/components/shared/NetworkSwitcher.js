@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { DownOutlined } from '@ant-design/icons';
 import { Menu, Dropdown, Button } from 'antd';
-import { NetworkContext } from 'contexts/Store';
+import { NetworkContext } from 'contexts/Network';
 
 let networkId = 'Mainnet';
 let connectedNetwork = networkId;
@@ -17,8 +17,8 @@ const NetworkDropdown = styled(Dropdown)`
     width: 6px;
     border-radius: 50%;
     background-color: ${networkId !== connectedNetwork
-      ? '#dd5858'
-      : '#00ff8f;'};
+    ? '#dd5858'
+    : '#00ff8f;'};
     margin-right: 5px;
   }
   &:hover {

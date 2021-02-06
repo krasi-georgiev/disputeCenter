@@ -2,24 +2,21 @@ import React, { useEffect, useContext, useState } from 'react';
 import lodash from 'lodash';
 
 import { GET_LATEST_MINER_VALUES } from 'utils/queries';
-import { ContractContext } from 'contexts/Store';
 import GraphFetch from 'components/shared/GraphFetch';
+import NetworkContext from '../../contexts/Network';
+import chains from 'utils/chains.js';
 
 //TODO: Adjust to just look for miningvalues by current challenge again and again until they have a miningEvent
-
 const CurrentEventFetch = ({ setCurrentEvent }) => {
   const [latestValues, setLatestValues] = useState();
   const [currentDetails, setCurrentDetails] = useState();
   const [findNextDetails, setFindNextDetails] = useState();
 
-  const [contract] = useContext(ContractContext);
+  const [currentNetwork] = useContext(NetworkContext);
 
   useEffect(() => {
-    if (contract) {
-      getCurrentDetails();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contract]);
+    getCurrentDetails();
+  });
 
   useEffect(() => {
     const initValues = async () => {
@@ -76,7 +73,8 @@ const CurrentEventFetch = ({ setCurrentEvent }) => {
 
   const getCurrentDetails = async () => {
     try {
-      const currentDetails = await contract.service.getCurrentVariables();
+      const currentDetails = fetch(chains[currentNetwork])
+        .then(response => response.json())
 
       setCurrentDetails(currentDetails);
 

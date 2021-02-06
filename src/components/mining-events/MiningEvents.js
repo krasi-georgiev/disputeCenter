@@ -3,12 +3,12 @@ import { Table } from 'antd';
 import Lottie from 'react-lottie';
 
 import Loader from 'components/shared/Loader';
-import { ModeContext } from 'contexts/Store';
+import { ThemeContext } from 'contexts/Theme';
 import { getMedianValue, getGranPrice } from 'utils/helpers';
 import DisputeModal from 'components/disputes/DisputeModal';
 
 const MiningEvents = ({ miningEvent, valueIndex, current }) => {
-  const [mode] = useContext(ModeContext);
+  const [mode] = useContext(ThemeContext);
   const defaultOptions = {
     loop: true,
     autoplay: true,

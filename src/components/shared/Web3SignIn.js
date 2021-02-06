@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 
-import {
-  Web3ModalContext,
-  CurrentUserContext,
-  NetworkContext,
-} from '../../contexts/Store';
-import { createWeb3User, signInWithWeb3 } from '../../utils/auth';
+import { NetworkContext } from '../../contexts/Network';
+import { UserContext } from '../../contexts/User';
 import { Button } from 'antd';
+import { chains } from 'utils/chains';
+import TellorService from 'utils/tellorService';
+import { w3connect } from 'utils/auth';
+
+
 
 export const Web3SignIn = () => {
-  const [, setWeb3Modal] = useContext(Web3ModalContext);
-  const [, setCurrentUser] = useContext(CurrentUserContext);
+  const [, setCurrentUser] = useContext(UserContext);
   const [currentNetwork] = useContext(NetworkContext);
 
   return (
@@ -19,14 +19,14 @@ export const Web3SignIn = () => {
       size="large"
       onClick={async () => {
         try {
-          const w3c = await signInWithWeb3(currentNetwork);
-
-          const [account] = await w3c.web3.eth.getAccounts();
-          setWeb3Modal(w3c);
-          const user = createWeb3User(account);
+          let user = {}
+          user.web3 = await w3connect(currentNetwork)
+          user.address = await user.web3.eth.getAccounts()
+          user.contracts = await TellorService(user.web3, chains[currentNetwork].contractAddr,)
+          user.balance = await user.contracts.service.getBalance(user.address);
           setCurrentUser(user);
         } catch (err) {
-          console.log('web3Modal error', err);
+          console.log('login error', err);
         }
       }}
     >
